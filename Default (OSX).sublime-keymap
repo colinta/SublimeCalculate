@@ -1,0 +1,4 @@
+[
+    { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": false} },
+    { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": true} }
+]

@@ -1,0 +1,7 @@
+{
+  "repo": "SublimeCalculate",
+  "name": "Calculate",
+  "description": "Calculations using python.  Also provides some number-related functions, like counting (across multiple selections).",
+  "author": "Colin Thomas-Arnold (colinta)",
+  "homepage": "https://github.com/colinta/SublimeCalculate"
+}

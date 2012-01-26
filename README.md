@@ -1,5 +1,5 @@
-SublimeCalculate for Sublime Text 2
-===================================
+Calculate for Sublime Text 2
+============================
 
 Select a formula and press `ctrl+shift+c` to evaluate it using python.  Result is printed as " = *value*".  `ctrl+shift+=` does the same thing, but replaces the selection.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
 

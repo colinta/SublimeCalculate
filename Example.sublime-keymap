@@ -1,4 +1,5 @@
 [
     { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": false} },
+    { "keys": ["ctrl+shift+1"], "command": "calculate_count" },
     { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": true} }
 ]

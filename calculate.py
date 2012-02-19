@@ -57,25 +57,75 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
     def run(self, edit, index=1):
         regions = [region for region in self.view.sel()]
 
-        def generate_counter(initial):
+        def generate_integer_counter(initial):
+            def count():
+                offset = initial
+                while True:
+                    yield unicode(offset)
+                    offset += 1
+
+            return iter(count()).next
+
+        def generate_hexadecimal_counter(initial, length):
+            def count():
+                offset = initial
+                while True:
+                    yield u"0x%x" % offset
+                    offset += 1
+
+            return iter(count()).next
+
+        def generate_octal_counter(initial, length):
+            def count():
+                offset = initial
+                while True:
+                    yield u"0%o" % offset
+                    offset += 1
+
+            return iter(count()).next
+
+        def generate_string_counter(initial):
             def count():
                 offset = initial
                 while True:
                     yield offset
-                    offset += 1
+
+                    up = 1  # increase last character
+                    while True:
+                        o = ord(offset[-up])
+                        o += 1
+                        tail = ''
+                        if up > 1:
+                            tail = offset[-up + 1:]
+
+                        if o > ord('z'):
+                            offset = offset[:-up] + u'a' + tail
+                            up += 1
+                            if len(offset) < up:
+                                offset = u'a' + offset
+                                break
+                        else:
+                            offset = offset[:-up] + unichr(o) + tail
+                            break
+
             return iter(count()).next
 
         is_first = True
         subs = []
         for region in regions:
             if is_first:
-                print region
                 # see if the region is a number or alphanumerics
                 content = self.view.substr(region)
-                if re.match('[0-9]+$', content):
-                    counter = generate_counter(int(content))
+                if re.match('0x[0-9a-fA-F]+$', content):
+                    counter = generate_hexadecimal_counter(int(content[2:], 16), len(regions))
+                elif re.match('0[0-7]+$', content):
+                    counter = generate_octal_counter(int(content[1:], 8), len(regions))
+                elif re.match('[0-9]+$', content):
+                    counter = generate_integer_counter(int(content))
+                elif re.match('[a-z]+$', content):
+                    counter = generate_string_counter(content)
                 else:
-                    counter = generate_counter(index)
+                    counter = generate_integer_counter(index)
 
             subs.append((region, str(counter())))
 

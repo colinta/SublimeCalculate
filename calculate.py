@@ -20,6 +20,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
             try:
                 error = self.run_each(edit, region, **kwargs)
             except Exception as exception:
+                print repr(exception)
                 error = exception.message
 
             if error:

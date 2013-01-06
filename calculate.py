@@ -6,6 +6,18 @@ import re
 
 
 class CalculateCommand(sublime_plugin.TextCommand):
+    def __init__(self, *args, **kwargs):
+        sublime_plugin.TextCommand.__init__(self, *args, **kwargs)
+        self.dict = {}
+        for key in dir(math):
+            self.dict[key] = getattr(math, key)
+
+        def average(nums):
+            return sum(nums) / len(nums)
+
+        self.dict['avg'] = average
+        self.dict['average'] = average
+
     def run(self, edit, **kwargs):
         calculate_e = self.view.begin_edit('calculate')
         regions = [region for region in self.view.sel()]
@@ -20,7 +32,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
             try:
                 error = self.run_each(edit, region, **kwargs)
             except Exception as exception:
-                print repr(exception)
                 error = exception.message
 
             if error:
@@ -28,17 +39,9 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.view.end_edit(calculate_e)
 
     def calculate(self, formula):
-        dict = {}
-        for key in dir(math):
-            dict[key] = getattr(math, key)
-
-        def average(nums):
-            return sum(nums) / len(nums)
-
-        dict['avg'] = average
-        dict['average'] = average
-
-        return unicode(eval(formula, dict, {}))
+        formula = re.sub(r'0*(\d+)',r'\1',formula) # replace leading 0 to numbers 
+        formula = re.sub(r'\n',' ',formula)  # replace newlines by spaces
+        return unicode(eval(formula, self.dict, {}))
 
     def run_each(self, edit, region, replace=False):
         if region.empty() and len(self.view.sel()):

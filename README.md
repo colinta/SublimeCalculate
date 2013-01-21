@@ -3,6 +3,8 @@ Calculate for Sublime Text 2
 
 Select a formula and press `ctrl+shift+c` to evaluate it using python.  Result is printed as " = *value*".  `ctrl+shift+=` does the same thing, but replaces the selection.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
 
+Any function from `math` and `random` libraries can be used. You can generate passwords using pwd(len).
+
 There is also a counting command, used to count from 1 (or another index, see below) and incrementing for each region.
 
 

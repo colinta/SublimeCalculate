@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 
 import math
+import random
 import re
 
 
@@ -9,6 +10,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
         sublime_plugin.TextCommand.__init__(self, *args, **kwargs)
         self.dict = {}
+        for key in dir(random):
+            self.dict[key] = getattr(random, key)
         for key in dir(math):
             self.dict[key] = getattr(math, key)
 
@@ -17,6 +20,14 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
         self.dict['avg'] = average
         self.dict['average'] = average
+
+        def password(length):
+            pwdchrs = 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            return ''.join(random.choice(pwdchrs) for _ in xrange(length))
+
+        self.dict['pwd'] = password
+        self.dict['password'] = password
+
 
     def run(self, edit, **kwargs):
         calculate_e = self.view.begin_edit('calculate')
@@ -39,7 +50,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.view.end_edit(calculate_e)
 
     def calculate(self, formula):
-        formula = re.sub(r'(?<![\d\.])0*(\d+)',r'\1',formula) # replace leading 0 to numbers
+        formula = re.sub(r'(?<![\d\.])0*(\d+)',r'\1',formula) # replace leading 0 to numbers, could be  too 
         formula = re.sub(r'\n',' ',formula)  # replace newlines by spaces
         return unicode(eval(formula, self.dict, {}))
 

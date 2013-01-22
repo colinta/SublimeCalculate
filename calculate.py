@@ -22,7 +22,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['average'] = average
 
         def password(length):
-            pwdchrs = 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            pwdchrs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
             return ''.join(random.choice(pwdchrs) for _ in xrange(length))
 
         self.dict['pwd'] = password

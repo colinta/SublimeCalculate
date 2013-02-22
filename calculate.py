@@ -50,8 +50,10 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.view.end_edit(calculate_e)
 
     def calculate(self, formula):
-        formula = re.sub(r'(?<![\d\.])0*(\d+)',r'\1',formula) # replace leading 0 to numbers
-        formula = re.sub(r'\n',' ',formula)  # replace newlines by spaces
+        # replace leading 0 to numbers
+        formula = re.sub(r'(?<![\d\.])0*(\d+)', r'\1', formula)
+        # replace newlines by spaces
+        formula = re.sub(r'\n', ' ', formula)
         return unicode(eval(formula, self.dict, {}))
 
     def run_each(self, edit, region, replace=False):

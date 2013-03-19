@@ -28,7 +28,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['pwd'] = password
         self.dict['password'] = password
 
-
     def run(self, edit, **kwargs):
         calculate_e = self.view.begin_edit('calculate')
         regions = [region for region in self.view.sel()]
@@ -36,8 +35,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
         # any edits that are performed will happen in reverse; this makes it
         # easy to keep region.a and region.b pointing to the correct locations
         def get_end(region):
-            return region.end
-        regions.sort(key=get_end)
+            return region.end()
+        regions.sort(key=get_end, reverse=True)
 
         for region in regions:
             try:
@@ -151,8 +150,8 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
         # any edits that are performed will happen in reverse; this makes it
         # easy to keep region.a and region.b pointing to the correct locations
         def get_end(region):
-            return region.end
-        subs.sort(key=get_end)
+            return region.end()
+        subs.sort(key=get_end, reverse=True)
 
         calculate_e = self.view.begin_edit('calculate')
         for sub in subs:

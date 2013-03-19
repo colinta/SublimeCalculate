@@ -35,9 +35,9 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
         # any edits that are performed will happen in reverse; this makes it
         # easy to keep region.a and region.b pointing to the correct locations
-        def compare(region_a, region_b):
-            return cmp(region_b.end(), region_a.end())
-        regions.sort(compare)
+        def get_end(region):
+            return region.end
+        regions.sort(key=get_end)
 
         for region in regions:
             try:
@@ -150,9 +150,9 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
 
         # any edits that are performed will happen in reverse; this makes it
         # easy to keep region.a and region.b pointing to the correct locations
-        def compare(sub_a, sub_b):
-            return cmp(sub_b[0].end(), sub_a[0].end())
-        subs.sort(compare)
+        def get_end(region):
+            return region.end
+        subs.sort(key=get_end)
 
         calculate_e = self.view.begin_edit('calculate')
         for sub in subs:

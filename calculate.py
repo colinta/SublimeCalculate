@@ -149,8 +149,8 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
 
         # any edits that are performed will happen in reverse; this makes it
         # easy to keep region.a and region.b pointing to the correct locations
-        def get_end(region):
-            return region.end()
+        def get_end(region_tuple):
+            return region_tuple[0].end()
         subs.sort(key=get_end, reverse=True)
 
         calculate_e = self.view.begin_edit('calculate')

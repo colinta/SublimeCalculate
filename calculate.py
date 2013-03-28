@@ -23,22 +23,13 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
         def password(length):
             pwdchrs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-            return ''.join(random.choice(pwdchrs) for _ in xrange(length))
+            return ''.join(random.choice(pwdchrs) for _ in range(length))
 
         self.dict['pwd'] = password
         self.dict['password'] = password
 
     def run(self, edit, **kwargs):
-        calculate_e = self.view.begin_edit('calculate')
-        regions = [region for region in self.view.sel()]
-
-        # any edits that are performed will happen in reverse; this makes it
-        # easy to keep region.a and region.b pointing to the correct locations
-        def get_end(region):
-            return region.end()
-        regions.sort(key=get_end, reverse=True)
-
-        for region in regions:
+        for region in self.view.sel():
             try:
                 error = self.run_each(edit, region, **kwargs)
             except Exception as exception:
@@ -46,14 +37,13 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
             if error:
                 sublime.status_message(error)
-        self.view.end_edit(calculate_e)
 
     def calculate(self, formula):
         # replace leading 0 to numbers
         formula = re.sub(r'(?<![\d\.])0*(\d+)', r'\1', formula)
         # replace newlines by spaces
         formula = re.sub(r'\n', ' ', formula)
-        return unicode(eval(formula, self.dict, {}))
+        return str(eval(formula, self.dict, {}))
 
     def run_each(self, edit, region, replace=False):
         if region.empty() and len(self.view.sel()):

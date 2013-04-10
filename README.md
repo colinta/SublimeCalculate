@@ -11,7 +11,7 @@ There is also a counting command, used to count from 1 (or another index, see be
 Installation
 ------------
 
-1. Using Package Control, install "SublimeCalculate"
+1. Using Package Control, install "Calculate"
 
 Or:
 

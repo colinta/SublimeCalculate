@@ -1,9 +1,10 @@
-import sublime
-import sublime_plugin
-
+from functools import cmp_to_key
 import math
 import random
 import re
+
+import sublime
+import sublime_plugin
 
 
 class CalculateCommand(sublime_plugin.TextCommand):
@@ -46,12 +47,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
         return str(eval(formula, self.dict, {}))
 
     def run_each(self, edit, region, replace=False):
-        if region.empty() and len(self.view.sel()):
-            def on_done(formula):
-                value = self.calculate(formula)
-                self.view.insert(edit, region.begin(), value)
-            self.view.window().show_input_panel('Formula', '', on_done, None, None)
-        elif not region.empty():
+        if not region.empty():
             formula = self.view.substr(region)
             value = self.calculate(formula)
             if not replace:
@@ -143,9 +139,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             return region_tuple[0].end()
         subs.sort(key=get_end, reverse=True)
 
-        calculate_e = self.view.begin_edit('calculate')
         for sub in subs:
             self.view.sel().subtract(sub[0])
             self.view.replace(edit, sub[0], sub[1])
             self.view.sel().add(sublime.Region(sub[0].begin() + len(sub[1]), sub[0].begin() + len(sub[1])))
-        self.view.end_edit(calculate_e)

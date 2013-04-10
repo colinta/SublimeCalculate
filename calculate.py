@@ -57,8 +57,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
 class CalculateCountCommand(sublime_plugin.TextCommand):
     def run(self, edit, index=1):
-        regions = [region for region in self.view.sel()]
-
         def generate_integer_counter(initial):
             def count():
                 offset = initial
@@ -114,7 +112,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
 
         is_first = True
         subs = []
-        for region in regions:
+        for region in self.view.sel():
             if is_first:
                 # see if the region is a number or alphanumerics
                 content = self.view.substr(region)

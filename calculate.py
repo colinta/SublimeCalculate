@@ -61,10 +61,10 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             def count():
                 offset = initial
                 while True:
-                    yield unicode(offset)
+                    yield str(offset)
                     offset += 1
 
-            return iter(count()).next
+            return iter(count()).__next__
 
         def generate_hexadecimal_counter(initial, length):
             def count():

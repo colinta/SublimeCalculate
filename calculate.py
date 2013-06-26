@@ -73,7 +73,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                     yield u"0x%x" % offset
                     offset += 1
 
-            return iter(count()).next
+            return iter(count()).__next__
 
         def generate_octal_counter(initial, length):
             def count():
@@ -82,7 +82,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                     yield u"0%o" % offset
                     offset += 1
 
-            return iter(count()).next
+            return iter(count()).__next__
 
         def generate_string_counter(initial):
             def count():
@@ -105,10 +105,10 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                                 offset = u'a' + offset
                                 break
                         else:
-                            offset = offset[:-up] + unichr(o) + tail
+                            offset = offset[:-up] + chr(o) + tail
                             break
 
-            return iter(count()).next
+            return iter(count()).__next__
 
         is_first = True
         subs = []

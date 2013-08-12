@@ -1,5 +1,5 @@
-Calculate for Sublime Text 2
-============================
+Calculate
+=========
 
 Select a formula and press `ctrl+shift+c` to evaluate it using python.  Result is printed as " = *value*".  `ctrl+shift+=` does the same thing, but replaces the selection.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
 
@@ -11,27 +11,25 @@ There is also a counting command, used to count from 1 (or another index, see be
 Installation
 ------------
 
-### Sublime Text 2
-
 1. Using Package Control, install "SublimeCalculate"
 
 Or:
 
-1. Open the Sublime Text 2 Packages folder
+1. Open the Sublime Text Packages folder
 
-    - OS X: ~/Library/Application Support/Sublime Text 2/Packages/
-    - Windows: %APPDATA%/Sublime Text 2/Packages/
-    - Linux: ~/.Sublime Text 2/Packages/
+    - OS X: ~/Library/Application Support/Sublime Text 3/Packages/
+    - Windows: %APPDATA%/Sublime Text 3/Packages/
+    - Linux: ~/.Sublime Text 3/Packages/
 
 2. clone this repo
 3. Install keymaps for the commands (see Example.sublime-keymap for my preferred keys)
 
-### Sublime Text 3
+### Sublime Text 2
 
 1. Open the Sublime Text 2 Packages folder
-2. clone this repo, but use the `st3` branch
+2. clone this repo, but use the `st2` branch
 
-       git clone -b st3 git@github.com:colinta/SublimeCalculate
+       git clone -b st2 git@github.com:colinta/SublimeCalculate
 
 Commands
 --------

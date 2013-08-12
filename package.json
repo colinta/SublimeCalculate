@@ -6,7 +6,7 @@
   "labels": ["calculator"],
   "releases": [
     {
-      "details": "https://github.com/colinta/SublimeCalculate/tree/master",
+      "details": "https://github.com/colinta/SublimeCalculate/tree/st2",
       "sublime_text": "<3000"
     },
     {

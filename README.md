@@ -1,17 +1,22 @@
 Calculate
 =========
 
-Select a formula and press `ctrl+shift+c` to evaluate it using python.  Result is printed as " = *value*".  `ctrl+shift+=` does the same thing, but replaces the selection.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
+Select a formula and run `calculate` to evaluate it using python.  The result is
+appended to the selection (`1+1` => `1+1 = 2`).  Using the `replace: true`
+option replaces the selected text with the result.  If you have zero selections,
+you will be prompted for a formula, and the result will be inserted.
 
-Any function from `math` and `random` libraries can be used. You can generate passwords using pwd(len).
+Any function from `math` and `random` libraries can be used. You can generate
+passwords using pwd(len).
 
-There is also a counting command, used to count from 1 (or another index, see below) and incrementing for each region.
+There is also a `calculate_count` command, used to count from 1 (or another
+index, see below) and incrementing at every cursor.
 
 
 Installation
 ------------
 
-1. Using Package Control, install "SublimeCalculate"
+1. Using Package Control, install "Calculate"
 
 Or:
 
@@ -35,4 +40,21 @@ Commands
 --------
 
 * `calculate`: Calculates the selection(s), or prompts for a formula.  If `replace` is false it leaves the content.
-* `calculate_count`: Counts, adding 1 to the initial index, over each selection.  If the first selection is a number, it is used as the initial index.  Otherwise 1 is used, or it can be passed in as an argument (`index`).
+* `calculate_count`: Counts, adding 1 to the initial index, over each selection.
+  - If the first selection is a number, it is used as the initial index.
+  - If it is a letter, the alphabet is used.
+  - Otherwise 1 is used, or it can be passed in as an argument to the command (`index: N`).
+
+Keybindinds
+-----------
+
+Open your key bindings file and add the bindings you want.  For example:
+
+###### Example.sublime-keymap
+```json
+[
+    { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": false} },
+    { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": true} },
+    { "keys": ["ctrl+shift+alt+1"], "command": "calculate_count" }
+]
+```

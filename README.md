@@ -45,7 +45,7 @@ Commands
   - If it is a letter, the alphabet is used.
   - Otherwise 1 is used, or it can be passed in as an argument to the command (`index: N`).
 
-Keybindinds
+Keybindings
 -----------
 
 Open your key bindings file and add the bindings you want.  For example:

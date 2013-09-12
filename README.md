@@ -1,16 +1,11 @@
 Calculate
 =========
 
-Select a formula and run `calculate` to evaluate it using python.  The result is
-appended to the selection (`1+1` => `1+1 = 2`).  Using the `replace: true`
-option replaces the selected text with the result.  If you have zero selections,
-you will be prompted for a formula, and the result will be inserted.
+Select a formula and run `calculate` to evaluate it using python.  The result is appended to the selection (`1+1` => `1+1 = 2`).  Using the `replace: true` option replaces the selected text with the result.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
 
-Any function from `math` and `random` libraries can be used. You can generate
-passwords using pwd(len).
+Any function from `math` and `random` libraries can be used. You can generate passwords using pwd(len).
 
-There is also a `calculate_count` command, used to count from 1 (or another
-index, see below) and incrementing at every cursor.
+There is also a `calculate_count` command, used to count from 1 (or another index, see below) and incrementing at every cursor.
 
 
 Installation
@@ -21,10 +16,9 @@ Installation
 Or:
 
 1. Open the Sublime Text Packages folder
-
     - OS X: ~/Library/Application Support/Sublime Text 3/Packages/
     - Windows: %APPDATA%/Sublime Text 3/Packages/
-    - Linux: ~/.Sublime Text 3/Packages/
+    - Linux: ~/.Sublime Text 3/Packages/ or ~/.config/sublime-text-3/Packages
 
 2. clone this repo
 3. Install keymaps for the commands (see Example.sublime-keymap for my preferred keys)

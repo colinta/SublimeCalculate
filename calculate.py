@@ -30,12 +30,14 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['password'] = password
 
     def run(self, edit, **kwargs):
+        self.dict['i'] = 0
         for region in self.view.sel():
             try:
                 error = self.run_each(edit, region, **kwargs)
             except Exception as exception:
                 error = exception.message
 
+            self.dict['i'] = self.dict['i'] + 1
             if error:
                 sublime.status_message(error)
 

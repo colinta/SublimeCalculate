@@ -1,6 +1,6 @@
 {
   "name": "Calculate",
-  "description": "Calculations using python.  Also provides some number-related functions, like counting (across multiple selections).",
+  "description": "Calculations using python.  Also provides some number-related functions, like counting (across multiple selections).  With contributions from Subhas Dandapani (rdsubhas), Alexander Kirk (akirk), and Kroum Tzanev (kpym)",
   "author": "Colin T.A. Gray (colinta)",
   "details": "https://github.com/colinta/SublimeCalculate",
   "labels": ["calculator"],

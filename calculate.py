@@ -52,6 +52,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
         if not region.empty():
             formula = self.view.substr(region)
             value = self.calculate(formula)
+            if value[-2:] == '.0':
+                value = value[:-2]
             if not replace:
                 value = "%s = %s" % (formula, value)
             self.view.replace(edit, region, value)

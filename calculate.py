@@ -22,7 +22,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['avg'] = average
         self.dict['average'] = average
 
-        def password(length):
+        def password(length=20):
             pwdchrs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
             return ''.join(random.choice(pwdchrs) for _ in range(length))
 
@@ -35,7 +35,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
             try:
                 error = self.run_each(edit, region, **kwargs)
             except Exception as exception:
-                error = exception.message
+                error = str(exception)
 
             self.dict['i'] = self.dict['i'] + 1
             if error:
@@ -46,7 +46,11 @@ class CalculateCommand(sublime_plugin.TextCommand):
         formula = re.sub(r'(?<![\d\.])0*(\d+)', r'\1', formula)
         # replace newlines by spaces
         formula = re.sub(r'\n', ' ', formula)
-        return str(eval(formula, self.dict, {}))
+        result = eval(formula, self.dict, {})
+        if isinstance(result, str):
+            return result
+        else:
+            return str(round(result, 13))
 
     def run_each(self, edit, region, replace=False):
         if not region.empty():

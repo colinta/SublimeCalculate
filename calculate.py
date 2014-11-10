@@ -47,17 +47,19 @@ class CalculateCommand(sublime_plugin.TextCommand):
         # replace newlines by spaces
         formula = re.sub(r'\n', ' ', formula)
         result = eval(formula, self.dict, {})
-        if isinstance(result, str):
-            return result
-        else:
-            return str(round(result, 13))
+
+        if not isinstance(result, str):
+            result = str(result)
+
+        if result[-2:] == '.0':
+            result = result[:-2]
+
+        return result
 
     def run_each(self, edit, region, replace=False):
         if not region.empty():
             formula = self.view.substr(region)
             value = self.calculate(formula)
-            if value[-2:] == '.0':
-                value = value[:-2]
             if not replace:
                 value = "%s = %s" % (formula, value)
             self.view.replace(edit, region, value)

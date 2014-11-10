@@ -31,6 +31,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, **kwargs):
         self.dict['i'] = 0
+        if len(self.view.sel()) == 1 and not self.view.sel()[0]:
+            return self.get_formula()
         for region in self.view.sel():
             try:
                 error = self.run_each(edit, region, **kwargs)
@@ -63,6 +65,13 @@ class CalculateCommand(sublime_plugin.TextCommand):
             if not replace:
                 value = "%s = %s" % (formula, value)
             self.view.replace(edit, region, value)
+
+    def get_formula(self):
+        self.view.window().show_input_panel('Calculate:', '', self.on_calculate, None, None)
+
+    def on_calculate(self, formula):
+        value = self.calculate(formula)
+        self.view.run_command('insert_snippet', {'contents': '${0:%s}' % value})
 
 
 class CalculateCountCommand(sublime_plugin.TextCommand):

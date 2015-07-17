@@ -129,6 +129,18 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
 
             return iter(count()).__next__
 
+        def generate_plusminus_counter(initial):
+            def count():
+                offset = initial
+                while True:
+                    yield str(offset)
+                    if offset == '-':
+                        offset = '+'
+                    else:
+                        offset = '-'
+
+            return iter(count()).__next__
+
         is_first = True
         subs = []
         for region in self.view.sel():
@@ -143,6 +155,8 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                     counter = generate_integer_counter(int(content))
                 elif re.match('[a-z]+$', content):
                     counter = generate_string_counter(content)
+                elif re.match('[+-]+$', content):
+                    counter = generate_plusminus_counter(content)
                 else:
                     counter = generate_integer_counter(index)
 

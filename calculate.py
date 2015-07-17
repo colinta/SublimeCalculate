@@ -147,11 +147,11 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             if is_first:
                 # see if the region is a number or alphanumerics
                 content = self.view.substr(region)
-                if re.match('0x[0-9a-fA-F]+$', content):
+                if re.match('0[xX][0-9a-fA-F]+$', content):
                     counter = generate_hexadecimal_counter(int(content[2:], 16), len(regions))
-                elif re.match('0[0-7]+$', content):
+                elif re.match('0[oO]?[0-7]+$', content):
                     counter = generate_octal_counter(int(content[1:], 8), len(regions))
-                elif re.match('[0-9]+$', content):
+                elif re.match('[+-]?[0-9]+$', content):
                     counter = generate_integer_counter(int(content))
                 elif re.match('[a-z]+$', content):
                     counter = generate_string_counter(content)

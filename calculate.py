@@ -104,6 +104,12 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             return iter(count()).__next__
 
         def generate_string_counter(initial):
+            if re.match('[a-z]+$', initial):
+                maxord = ord('z')
+                letter = 'a'
+            else:
+                maxord = ord('Z')
+                letter = 'A'
             def count():
                 offset = initial
                 while True:
@@ -117,11 +123,11 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                         if up > 1:
                             tail = offset[-up + 1:]
 
-                        if o > ord('z'):
-                            offset = offset[:-up] + u'a' + tail
+                        if o > maxord:
+                            offset = offset[:-up] + letter + tail
                             up += 1
                             if len(offset) < up:
-                                offset = u'a' + offset
+                                offset = letter + offset
                                 break
                         else:
                             offset = offset[:-up] + chr(o) + tail
@@ -153,7 +159,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                     counter = generate_octal_counter(int(content[1:], 8), len(regions))
                 elif re.match('[+-]?[0-9]+$', content):
                     counter = generate_integer_counter(int(content))
-                elif re.match('[a-z]+$', content):
+                elif re.match('[A-Za-z]+$', content):
                     counter = generate_string_counter(content)
                 elif re.match('[+-]+$', content):
                     counter = generate_plusminus_counter(content)

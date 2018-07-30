@@ -44,8 +44,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
                 sublime.status_message(error)
 
     def calculate(self, formula):
-        # replace leading 0 to numbers
-        formula = re.sub(r'(?<![\d\.])0*(\d+)', r'\1', formula)
         # replace newlines by spaces
         formula = re.sub(r'\n', ' ', formula)
         result = eval(formula, self.dict, {})

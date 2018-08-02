@@ -44,6 +44,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
                 sublime.status_message(error)
 
     def calculate(self, formula):
+        # remove preceding 0s (preserve hex digits)
+        formula = re.sub(r'\b(?<![\d\.])0*(\d+)\b', r'\1', formula)
         # replace newlines by spaces
         formula = re.sub(r'\n', ' ', formula)
         result = eval(formula, self.dict, {})

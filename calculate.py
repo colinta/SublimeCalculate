@@ -154,9 +154,9 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
                 # see if the region is a number or alphanumerics
                 content = self.view.substr(region)
                 if re.match('0[xX][0-9a-fA-F]+$', content):
-                    counter = generate_hexadecimal_counter(int(content[2:], 16), len(regions))
+                    counter = generate_hexadecimal_counter(int(content[2:], 16), len(region))
                 elif re.match('0[oO]?[0-7]+$', content):
-                    counter = generate_octal_counter(int(content[1:], 8), len(regions))
+                    counter = generate_octal_counter(int(content[1:], 8), len(region))
                 elif re.match('[+-]?[0-9]+$', content):
                     counter = generate_integer_counter(int(content))
                 elif re.match('[A-Za-z]+$', content):

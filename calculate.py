@@ -44,17 +44,28 @@ class CalculateCommand(sublime_plugin.TextCommand):
                 sublime.status_message(error)
 
     def calculate(self, formula):
+        # remove newlines and spaces
+        formula = ''.join(formula.replace(' ','').splitlines())
+        # replace × by * and ÷ by /
+        formula = formula.replace('×', '*').replace('÷', '/')
+        # try to guess what is the decimal separator
+        french = ("." not in formula and "," in formula)
+        if french:
+            formula = formula.replace(',', '.')
         # remove preceding 0s (preserve hex digits)
         formula = re.sub(r'\b(?<![\d\.])0*(\d+)\b', r'\1', formula)
-        # replace newlines by spaces
-        formula = re.sub(r'\n', ' ', formula)
+        # finally evaluate it
         result = eval(formula, self.dict, {})
 
+        # convert result to string if needed
         if not isinstance(result, str):
             result = str(result)
-
+        # if result is integer
         if result[-2:] == '.0':
             result = result[:-2]
+        # restore decimal separator if needed
+        if french:
+            result = result.replace('.', ',')
 
         return result
 

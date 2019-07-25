@@ -4,7 +4,19 @@
         "command": "calculate"
     },
     {
-        "caption": "Count from 1",
+        "caption": "Calculate: Add all selections",
+        "command": "calculate_add"
+    },
+    {
+        "caption": "Calculate: Increment",
+        "command": "calculate_increment"
+    },
+    {
+        "caption": "Calculate: Decrement",
+        "command": "calculate_decrement"
+    },
+    {
+        "caption": "Calculate: Count",
         "command": "calculate_count"
     }
 ]

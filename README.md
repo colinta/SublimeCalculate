@@ -1,9 +1,9 @@
 Calculate
 =========
 
-Select a formula and run `calculate` to evaluate it using python.  The result is appended to the selection (`1+1` => `1+1 = 2`).  Using the `replace: true` option replaces the selected text with the result.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
+Select a formula and run `calculate` to evaluate it using python.  The result can be appended to the selection (`1+1` => `1+1 = 2`) or replace the selection (`1+1` => `2`).  Using the `replace: true` option replaces the selected text with the result.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
 
-Any function from `math` and `random` libraries can be used ([math][python math] and [random][python random] documentation).
+Any function from `math` and `random` libraries can be used ([math][] and [random][] documentation).
 
 You can generate passwords using `pwd(len)` (or `password(len)`).
 You can calculate averages (mean) using `avg([values])` (or `average([values])`).
@@ -15,8 +15,8 @@ If you need to use a counter, you can use the `i` variable.  Every selection wil
 
 There is also a `calculate_count` command, used to count from 1 (or another index, see below) and incrementing at every cursor.
 
-[python math]: http://docs.python.org/2/library/math.html
-[python random]: http://docs.python.org/2/library/random.html
+[math]: http://docs.python.org/2/library/math.html
+[random]: http://docs.python.org/2/library/random.html
 
 Installation
 ------------
@@ -36,12 +36,15 @@ Or:
 Commands
 --------
 
-* `calculate`: Calculates the selection(s), or prompts for a formula.  If `replace` is false it leaves the content.
+* `calculate`: Calculates the selection(s), or prompts for a formula.  The `replace` argument (default: `false`) can be used to format the result (see above).
 * `calculate_count`: Counts, adding 1 to the initial index, over each selection.
   - If the first selection is a number, it is used as the initial index.
   - Hexadecimal (`0xNNNN`) and octal (`0NNNN`) are matched, too.
   - If it is a letter, the alphabet is used.
-  - Otherwise 1 is used, or it can be passed in as an argument to the command (`index: N`).
+  - Otherwise 1 is used, or it can be passed in as an argument (`index`) to the command.
+* `calculate_add`: Add all the selected numbers and put the summation in the last empty cursor.
+* `calculate_increment`: Increment the selected numbers by 1 (or number that the cursor is on).
+* `calculate_decrement`: Decrement the selected numbers by 1 (or number that the cursor is on).
 
 Keybindings
 -----------
@@ -53,6 +56,8 @@ Open your key bindings file and add the bindings you want.  For example:
 [
     { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": false} },
     { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": true} },
+    { "keys": ["ctrl+up"], "command": "calculate_increment" },
+    { "keys": ["ctrl+down"], "command": "calculate_decrement" },
     { "keys": ["ctrl+shift+alt+1"], "command": "calculate_count" }
 ]
 ```

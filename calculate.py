@@ -184,3 +184,51 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             self.view.sel().subtract(sub[0])
             self.view.replace(edit, sub[0], sub[1])
             self.view.sel().add(sublime.Region(sub[0].begin() + len(sub[1]), sub[0].begin() + len(sub[1])))
+
+
+class CalculateAddCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        insert_region = None
+        numbers = []
+        for region in self.view.sel():
+            if not region:
+                insert_region = region
+            else:
+                try:
+                    number = int(self.view.substr(region))
+                    numbers.append(number)
+                except ValueError:
+                    pass
+
+        if insert_region is None:
+            return
+
+        self.view.replace(edit, insert_region, repr(sum(numbers)))
+
+
+class CalculateIncrementCommand(sublime_plugin.TextCommand):
+    DELTA = 1
+
+    def is_number(self, c):
+        return bool(re.match(r'[\d-]', c))
+
+    def run(self, edit):
+        for region in self.view.sel():
+            if not region:
+                start = end = region.a
+                while self.is_number(self.view.substr(sublime.Region(start - 1, start))):
+                    start -= 1
+                while self.is_number(self.view.substr(sublime.Region(end, end + 1))):
+                    end += 1
+                region = sublime.Region(start, end)
+
+            try:
+                number = int(self.view.substr(region))
+            except ValueError:
+                continue
+            number += self.DELTA
+            self.view.replace(edit, region, str(number))
+
+
+class CalculateDecrementCommand(CalculateIncrementCommand):
+    DELTA = -1

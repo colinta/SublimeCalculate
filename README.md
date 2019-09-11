@@ -1,7 +1,7 @@
 Calculate
 =========
 
-Select a formula and run `calculate` to evaluate it using python.  The result can be appended to the selection (`1+1` => `1+1 = 2`) or replace the selection (`1+1` => `2`).  Using the `replace: true` option replaces the selected text with the result.  If you have zero selections, you will be prompted for a formula, and the result will be inserted.
+Select a formula and run `calculate` to evaluate it using python.  The result can be appended to the selection (`1+1` => `1+1 = 2`) or replace the selection (`1+1` => `2`).  Using the `replace: true` option replaces the selected text with the result.  Empty selections are treated as operating on lines, like most sublime commands.  When the line under the caret is not a formula, you will be prompted for one, and the result will be inserted.  
 
 Any function from `math` and `random` libraries can be used ([math][] and [random][] documentation).
 
@@ -36,7 +36,7 @@ Or:
 Commands
 --------
 
-* `calculate`: Calculates the selection(s), or prompts for a formula.  The `replace` argument (default: `false`) can be used to format the result (see above).
+* `calculate`: Calculates the selection(s), or prompts for a formula.  The `replace` argument (default: `false`) can be used to format the result (see above).  The `prompt` argument (default: `true`) controls when to prompt for a formula, `true` for default behavior (see above), `false` for never and `"always"` whenever the selection is empty. 
 * `calculate_count`: Counts, adding 1 to the initial index, over each selection.
   - If the first selection is a number, it is used as the initial index.
   - Hexadecimal (`0xNNNN`) and octal (`0NNNN`) are matched, too.

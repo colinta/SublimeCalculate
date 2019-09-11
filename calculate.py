@@ -29,6 +29,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['pwd'] = password
         self.dict['password'] = password
 
+        self.dict['__builtins__'] = {}
+
     def run(self, edit, **kwargs):
         self.dict['i'] = 0
         if len(self.view.sel()) == 1 and not self.view.sel()[0]:

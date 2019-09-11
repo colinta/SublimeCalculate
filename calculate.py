@@ -63,6 +63,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
             if not replace:
                 value = "%s = %s" % (formula, value)
             self.view.replace(edit, region, value)
+        elif prompt == 'always':
+            self.get_formula()
         else:
             line = self.view.line(region.a)
             formula = self.view.substr(line)

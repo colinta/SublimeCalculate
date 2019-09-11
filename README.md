@@ -36,7 +36,7 @@ Or:
 Commands
 --------
 
-* `calculate`: Calculates the selection(s), or prompts for a formula.  The `replace` argument (default: `false`) can be used to format the result (see above).  The `prompt` argument (default: `true`) controls whether to prompt for a formula or not (see above as well). 
+* `calculate`: Calculates the selection(s), or prompts for a formula.  The `replace` argument (default: `false`) can be used to format the result (see above).  The `prompt` argument (default: `true`) controls when to prompt for a formula, `true` for default behavior (see above), `false` for never and `"always"` whenever the selection is empty. 
 * `calculate_count`: Counts, adding 1 to the initial index, over each selection.
   - If the first selection is a number, it is used as the initial index.
   - Hexadecimal (`0xNNNN`) and octal (`0NNNN`) are matched, too.

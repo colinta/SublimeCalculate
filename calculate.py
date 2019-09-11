@@ -29,7 +29,22 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['pwd'] = password
         self.dict['password'] = password
 
-        self.dict['__builtins__'] = {}
+        builtins = {}
+        for key in [
+            'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes',
+            'callable', 'chr', 'compile', 'complex', 'dict', 'dir', 'divmod', 'enumerate', 
+            'filter', 'float', 'format', 'frozenset', 'getattr', 'hasattr', 'hash',
+            'hex', 'id', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'map', 
+            'max', 'memoryview', 'min', 'next', 'object', 'oct', 'ord', 'pow', 'range', 
+            'repr', 'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum', 'tuple', 
+            'type', 'vars', 'zip'
+        ]:
+            try:
+                builtins[key] = __builtins__[key]
+            except KeyError:
+                pass
+
+        self.dict['__builtins__'] = builtins
 
     def run(self, edit, **kwargs):
         self.dict['i'] = 0

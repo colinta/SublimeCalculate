@@ -1,6 +1,6 @@
 [
-    { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": false, "empty_as_line": true} },
-    { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": true, "empty_as_line": true} },
+    { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": false} },
+    { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": true} },
     { "keys": ["ctrl+up"], "command": "calculate_increment" },
     { "keys": ["ctrl+down"], "command": "calculate_decrement" },
     { "keys": ["ctrl+shift+alt+1"], "command": "calculate_count" }

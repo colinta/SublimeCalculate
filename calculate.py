@@ -31,8 +31,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, **kwargs):
         self.dict['i'] = 0
-        if not kwargs.get('empty_as_line', False) and len(self.view.sel()) == 1 and not self.view.sel()[0]:
-            return self.get_formula()
         for region in self.view.sel():
             try:
                 error = self.run_each(edit, region, **kwargs)
@@ -58,26 +56,33 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
         return result
 
-    def run_each(self, edit, region, replace=False, empty_as_line=False):
+    def run_each(self, edit, region, replace=False, prompt=True):
         if not region.empty():
             formula = self.view.substr(region)
             value = self.calculate(formula)
             if not replace:
                 value = "%s = %s" % (formula, value)
             self.view.replace(edit, region, value)
-        elif empty_as_line:
+        else:
             line = self.view.line(region.a)
             formula = self.view.substr(line)
 
-            value = self.calculate(formula)
-            self.view.sel().subtract(region)
-            if not replace:
-                value = " = %s" % (value)
-                self.view.replace(edit, sublime.Region(line.b, line.b), value)
+            try:
+                value = self.calculate(formula)
+            except SyntaxError as ex:
+                if prompt and len(self.view.sel()) == 1:
+                    self.get_formula()
+                else:
+                    raise ex
             else:
-                self.view.replace(edit, line, value)
-            line = self.view.line(line.a)
-            self.view.sel().add(sublime.Region(line.b, line.b))
+                self.view.sel().subtract(region)
+                if not replace:
+                    value = " = %s" % (value)
+                    self.view.replace(edit, sublime.Region(line.b, line.b), value)
+                else:
+                    self.view.replace(edit, line, value)
+                line = self.view.line(line.a)
+                self.view.sel().add(sublime.Region(line.b, line.b))
 
     def get_formula(self):
         self.view.window().show_input_panel('Calculate:', '', self.on_calculate, None, None)

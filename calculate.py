@@ -32,11 +32,11 @@ class CalculateCommand(sublime_plugin.TextCommand):
         builtins = {}
         for key in [
             'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes',
-            'callable', 'chr', 'compile', 'complex', 'dict', 'dir', 'divmod', 'enumerate', 
+            'callable', 'chr', 'compile', 'complex', 'dict', 'dir', 'divmod', 'enumerate',
             'filter', 'float', 'format', 'frozenset', 'getattr', 'hasattr', 'hash',
-            'hex', 'id', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'map', 
-            'max', 'memoryview', 'min', 'next', 'object', 'oct', 'ord', 'pow', 'range', 
-            'repr', 'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum', 'tuple', 
+            'hex', 'id', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'map',
+            'max', 'memoryview', 'min', 'next', 'object', 'oct', 'ord', 'pow', 'range',
+            'repr', 'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum', 'tuple',
             'type', 'vars', 'zip'
         ]:
             try:
@@ -59,14 +59,11 @@ class CalculateCommand(sublime_plugin.TextCommand):
                 sublime.status_message(error)
 
     def calculate(self, formula):
-        # remove newlines and spaces
-        formula = ''.join(formula.replace(' ','').splitlines())
+        # remove newlines
+        formula = formula.replace('\n',' ').replace('\r',' ')
         # replace × by * and ÷ by /
         formula = formula.replace('×', '*').replace('÷', '/')
-        # try to guess what is the decimal separator
-        french = ("." not in formula and "," in formula)
-        if french:
-            formula = formula.replace(',', '.')
+
         # remove preceding 0s (preserve hex digits)
         formula = re.sub(r'\b(?<![\d\.])0*(\d+)\b', r'\1', formula)
         # finally evaluate it
@@ -78,9 +75,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
         # if result is integer
         if result[-2:] == '.0':
             result = result[:-2]
-        # restore decimal separator if needed
-        if french:
-            result = result.replace('.', ',')
 
         return result
 
@@ -242,13 +236,21 @@ class CalculateAddCommand(sublime_plugin.TextCommand):
             if not region:
                 insert_region = region
             else:
+                number = self.view.substr(region)
+                french = ("." not in number and "," in number)
+                if french:
+                    number = number.replace(',', '.')
+                else:
+                    number = number.replace(',', '')
+
                 try:
-                    number = int(self.view.substr(region))
+                    number = float(number)
                     numbers.append(number)
                 except ValueError:
                     pass
 
         if insert_region is None:
+            sublime.status_message('Select an empty region where the output will be inserted')
             return
 
         self.view.replace(edit, insert_region, repr(sum(numbers)))

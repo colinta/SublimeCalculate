@@ -2,31 +2,35 @@ from functools import cmp_to_key
 import math
 import random
 import re
-from locale import (atof)
+from locale import (atof, str as locale_str)
 
 import sublime
 import sublime_plugin
 
 
+def mean(numbers, *more):
+    if more:
+        return mean([numbers] + list(more))
+    return sum(numbers) / len(numbers)
+
 def is_number(view, sel):
-    substr = view.substr(sel)
-    return substr.isnumeric()
+    try:
+        substr = view.substr(sel)
+        atof(substr)
+        return True
+    except ValueError:
+        return False
 
 class SelectionListener(sublime_plugin.EventListener):
     """
     If all selections are numbers, show sum and average in status bar
     """
     def on_selection_modified_async(self, view):
-        if len(view.sel()) <= 1:
+        number_selections = list(filter(lambda sel: is_number(view, sel), view.sel()))
+        if len(number_selections) <= 1:
             return
-        if any(map(lambda sel: not is_number(view, sel), view.sel())):
-            return
-        count = 0.0
-        sum = 0.0
-        for number in [float(view.substr(sel)) for sel in view.sel()]:
-            count += 1
-            sum += number
-        sublime.status_message("Sum: {:n}\tAverage: {:n}".format(sum, sum/count))
+        numbers = [atof(view.substr(sel)) for sel in number_selections]
+        sublime.status_message("Sum: {:n}\tAverage: {:n}".format(sum(numbers), mean(numbers)))
 
 class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
@@ -49,6 +53,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
         self.dict['pwd'] = password
         self.dict['password'] = password
+        self.dict['mean'] = mean
 
         builtins = {}
         for key in [
@@ -278,31 +283,28 @@ class CalculateAddCommand(CalculateMathCommand):
 
 class CalculateMeanCommand(CalculateMathCommand):
     def operation(self, numbers):
-        return sum(numbers) / len(numbers)
+        return mean(numbers)
 
 
 class CalculateIncrementCommand(sublime_plugin.TextCommand):
     DELTA = 1
 
-    def is_number(self, c):
-        return bool(re.match(r'[\d-]', c))
-
     def run(self, edit):
         for region in self.view.sel():
             if not region:
                 start = end = region.a
-                while self.is_number(self.view.substr(sublime.Region(start - 1, start))):
+                while is_number(self.view, sublime.Region(start - 1, start)):
                     start -= 1
-                while self.is_number(self.view.substr(sublime.Region(end, end + 1))):
+                while is_number(self.view, sublime.Region(end, end + 1)):
                     end += 1
                 region = sublime.Region(start, end)
 
             try:
-                number = int(self.view.substr(region))
+                number = atof(self.view.substr(region))
             except ValueError:
                 continue
             number += self.DELTA
-            self.view.replace(edit, region, str(number))
+            self.view.replace(edit, region, locale_str(number))
 
 
 class CalculateDecrementCommand(CalculateIncrementCommand):

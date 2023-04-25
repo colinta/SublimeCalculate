@@ -4,6 +4,10 @@
         "command": "calculate"
     },
     {
+        "caption": "Calculate: Average selections",
+        "command": "calculate_mean"
+    },
+    {
         "caption": "Calculate: Add all selections",
         "command": "calculate_add"
     },

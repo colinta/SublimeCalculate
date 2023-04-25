@@ -2,10 +2,31 @@ from functools import cmp_to_key
 import math
 import random
 import re
+from locale import (atof)
 
 import sublime
 import sublime_plugin
 
+
+def is_number(view, sel):
+    substr = view.substr(sel)
+    return substr.isnumeric()
+
+class SelectionListener(sublime_plugin.EventListener):
+    """
+    If all selections are numbers, show sum and average in status bar
+    """
+    def on_selection_modified_async(self, view):
+        if len(view.sel()) <= 1:
+            return
+        if any(map(lambda sel: not is_number(view, sel), view.sel())):
+            return
+        count = 0.0
+        sum = 0.0
+        for number in [float(view.substr(sel)) for sel in view.sel()]:
+            count += 1
+            sum += number
+        sublime.status_message("Sum: {:n}\tAverage: {:n}".format(sum, sum/count))
 
 class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
@@ -228,7 +249,7 @@ class CalculateCountCommand(sublime_plugin.TextCommand):
             self.view.sel().add(sublime.Region(sub[0].begin() + len(sub[1]), sub[0].begin() + len(sub[1])))
 
 
-class CalculateAddCommand(sublime_plugin.TextCommand):
+class CalculateMathCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         insert_region = None
         numbers = []
@@ -236,24 +257,28 @@ class CalculateAddCommand(sublime_plugin.TextCommand):
             if not region:
                 insert_region = region
             else:
-                number = self.view.substr(region)
-                french = ("." not in number and "," in number)
-                if french:
-                    number = number.replace(',', '.')
-                else:
-                    number = number.replace(',', '')
-
                 try:
-                    number = float(number)
-                    numbers.append(number)
+                    number = atof(self.view.substr(region))
                 except ValueError:
                     pass
+                numbers.append(number)
 
         if insert_region is None:
             sublime.status_message('Select an empty region where the output will be inserted')
             return
 
-        self.view.replace(edit, insert_region, repr(sum(numbers)))
+        self.view.replace(edit, insert_region, repr(self.operation(numbers)))
+
+    def operation(self, numbers):
+        raise Exception("Implement 'def operation(self, numbers)' in {}".format(type(self).__name__))
+
+class CalculateAddCommand(CalculateMathCommand):
+    def operation(self, numbers):
+        return sum(numbers)
+
+class CalculateMeanCommand(CalculateMathCommand):
+    def operation(self, numbers):
+        return sum(numbers) / len(numbers)
 
 
 class CalculateIncrementCommand(sublime_plugin.TextCommand):

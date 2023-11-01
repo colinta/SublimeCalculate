@@ -82,7 +82,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
             self.dict['i'] = self.dict['i'] + 1
             if error:
-                sublime.status_message(error)
+                self.view.show_popup(error)
 
     def calculate(self, formula):
         # remove newlines
@@ -269,7 +269,7 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
                 numbers.append(number)
 
         if insert_region is None:
-            sublime.status_message('Select an empty region where the output will be inserted')
+            self.view.show_popup('Select an empty region where the output will be inserted')
             return
 
         self.view.replace(edit, insert_region, repr(self.operation(numbers)))

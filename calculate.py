@@ -263,16 +263,18 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
                 insert_region = region
             else:
                 try:
-                    number = atof(self.view.substr(region))
+                    only_number = self.view.substr(region).replace('$', '')
+                    number = atof(only_number)
                 except ValueError:
                     pass
                 numbers.append(number)
 
+        result = repr(self.operation(numbers))
         if insert_region is None:
-            self.view.show_popup('Select an empty region where the output will be inserted')
-            return
-
-        self.view.replace(edit, insert_region, repr(self.operation(numbers)))
+            # self.view.show_popup('Select an empty region where the output will be inserted')
+            self.view.show_popup(result)
+        else:
+            self.view.replace(edit, insert_region, result)
 
     def operation(self, numbers):
         raise Exception("Implement 'def operation(self, numbers)' in {}".format(type(self).__name__))

@@ -93,7 +93,6 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, **kwargs):
         self.dict['i'] = 0
-        self.dict['n'] = len(self.view.sel())
 
         for region in self.view.sel():
             try:
@@ -291,6 +290,13 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
                 numbers.append(number)
 
         result = repr(self.operation(numbers, **kwargs))
+
+        # Get clipboard settings, by default clipboard is off.
+        settings = sublime.load_settings("SublimeCalculate.sublime-settings")
+        enable_clipboard = settings.get("copy_to_clipboard", False)
+        if enable_clipboard:
+            to_clipboard(result)
+
         if insert_region is None:
             # self.view.show_popup('Select an empty region where the output will be inserted')
             self.view.show_popup(result)
@@ -302,21 +308,15 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
 
 class CalculateAddCommand(CalculateMathCommand):
     def operation(self, numbers):
-        res = sum(numbers)
-        to_clipboard(res)
-        return res
+        return sum(numbers)
 
 class CalculateMeanCommand(CalculateMathCommand):
     def operation(self, numbers):
-        res = mean(numbers)
-        to_clipboard(res)
-        return res
+        return mean(numbers)
 
 class CalculateStdCommand(CalculateMathCommand):
     def operation(self, numbers, **kwargs):
-        res = std(numbers, **kwargs)
-        to_clipboard(res)
-        return res
+        return std(numbers, **kwargs)
 
 class CalculateIncrementCommand(sublime_plugin.TextCommand):
     DELTA = 1

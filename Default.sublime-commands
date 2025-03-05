@@ -8,6 +8,10 @@
         "command": "calculate_mean"
     },
     {
+        "caption": "Calculate: Standard Deviation of selections",
+        "command": "calculate_std"
+    },
+    {
         "caption": "Calculate: Add all selections",
         "command": "calculate_add"
     },

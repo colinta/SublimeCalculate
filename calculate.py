@@ -13,6 +13,12 @@ def mean(numbers, *more):
         return mean([numbers] + list(more))
     return sum(numbers) / len(numbers)
 
+def std(numbers, *more):
+    if more:
+        return std([numbers] + list(more))
+    variance = sum((x - mean(numbers)) ** 2 for x in numbers) / len(numbers)
+    return math.sqrt(variance)
+
 def is_number(view, sel):
     try:
         substr = view.substr(sel)
@@ -20,6 +26,10 @@ def is_number(view, sel):
         return True
     except ValueError:
         return False
+
+def to_clipboard(res):
+    sublime.set_clipboard(str(res))
+    sublime.status_message("Result " + str(res) + " copied to clipboard!")
 
 class SelectionListener(sublime_plugin.EventListener):
     """
@@ -281,12 +291,21 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
 
 class CalculateAddCommand(CalculateMathCommand):
     def operation(self, numbers):
-        return sum(numbers)
+        res = sum(numbers)
+        to_clipboard(res)
+        return res
 
 class CalculateMeanCommand(CalculateMathCommand):
     def operation(self, numbers):
-        return mean(numbers)
+        res = mean(numbers)
+        to_clipboard(res)
+        return res
 
+class CalculateStdCommand(CalculateMathCommand):
+    def operation(self, numbers):
+        res = std(numbers)
+        to_clipboard(res)
+        return std(numbers)
 
 class CalculateIncrementCommand(sublime_plugin.TextCommand):
     DELTA = 1

@@ -9,7 +9,7 @@ import sublime_plugin
 import json
 
 def load_settings():
-    return sublime.load_settings("SublimeCalculate.sublime-settings")
+    return sublime.load_settings("Calculate.sublime-settings")
 
 def mean(numbers, *more):
     if more:
@@ -53,11 +53,6 @@ class SelectionListener(sublime_plugin.EventListener):
             return
         numbers = [atof(view.substr(sel)) for sel in number_selections]
         sublime.status_message("Sum: {:n}\tAverage: {:n}".format(sum(numbers), mean(numbers)))
-
-# add replace command for convenience
-class CalculateReplaceCommand(CalculateCommand):
-    def run(self, edit):
-        self.view.run_command("calculate", {"replace": True})
 
 class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
@@ -191,6 +186,10 @@ class CalculateCommand(sublime_plugin.TextCommand):
         value = self.calculate(formula)
         self.view.run_command('insert_snippet', {'contents': '${0:%s}' % value})
 
+# add replace command for convenience
+class CalculateReplaceCommand(CalculateCommand):
+    def run(self, edit):
+        self.view.run_command("calculate", {"replace": True})
 
 class CalculateCountCommand(sublime_plugin.TextCommand):
     def run(self, edit, index=1):
@@ -397,18 +396,3 @@ class ApplyCalculationCommand(CalculateCommand):
                 self.view.show_popup(error)
 
             self.dict[self.index_symbol] = self.dict[self.index_symbol] + 1
-
-
-class OpenSettingsCommand(sublime_plugin.WindowCommand):
-    def run(self):
-        setting_path = os.path.join(sublime.packages_path(), 'User', 'SublimeCalculate.sublime-settings')
-        if not os.path.exists(setting_path):
-            default_settings = {
-                "copy_to_clipboard": False,
-                "index_symbol": "i",
-                "total_count_symbol": "n",
-                "region_symbol": "x",
-            }
-            with open(setting_path, 'w') as f:
-                json.dump(default_settings, f, indent=4)
-        self.window.run_command("open_file", {"file": setting_path})

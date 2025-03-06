@@ -34,9 +34,5 @@
     {
         "caption": "Calculate: Count",
         "command": "calculate_count"
-    },
-    {
-        "caption": "Calculate: Open Settings",
-        "command": "open_settings"
-    },
+    }
 ]

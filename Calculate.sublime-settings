@@ -2,4 +2,11 @@
   // Enable "copy on calculate" behaviour. After a calculation, the result will
   // be put into the clipboard.
   // "copy_to_clipboard": true,
+  // Customize the calculation symbol.
+  // The `index_symbol` presents the index of selections.
+  // The `total_count_symbol` presents the total count of regions.
+  // The `region_symbol` presents each region's value.
+  // "index_symbol": "i",
+  // "total_count_symbol": "n",
+  // "region_symbol": "x",
 }

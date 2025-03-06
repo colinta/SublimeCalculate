@@ -1,0 +1,5 @@
+{
+  // Enable "copy on calculate" behaviour. After a calculation, the result will
+  // be put into the clipboard.
+  // "copy_to_clipboard": true,
+}

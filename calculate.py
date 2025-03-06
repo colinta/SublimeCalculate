@@ -73,16 +73,28 @@ class CalculateCommand(sublime_plugin.TextCommand):
         self.dict['pwd'] = password
         self.dict['password'] = password
         self.dict['mean'] = mean
+        self.dict['std'] = std
 
         builtins = {}
         for key in [
-            'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes',
-            'callable', 'chr', 'compile', 'complex', 'dict', 'dir', 'divmod', 'enumerate',
-            'filter', 'float', 'format', 'frozenset', 'getattr', 'hasattr', 'hash',
-            'hex', 'id', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'map',
-            'max', 'memoryview', 'min', 'next', 'object', 'oct', 'ord', 'pow', 'range',
-            'repr', 'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum', 'tuple',
-            'type', 'vars', 'zip'
+            'abs',
+            'bool',
+            'chr',
+            'divmod',
+            'float',
+            'hex',
+            'int',
+            'len',
+            'max',
+            'min',
+            'oct',
+            'ord',
+            'pow',
+            'repr',
+            'reversed',
+            'round',
+            'str',
+            'sum',
         ]:
             try:
                 builtins[key] = __builtins__[key]
@@ -114,6 +126,10 @@ class CalculateCommand(sublime_plugin.TextCommand):
         formula = re.sub(r'\b(?<![\d\.])0*(\d+)\b', r'\1', formula)
         # finally evaluate it
         result = eval(formula, self.dict, {})
+        settings = sublime.load_settings("Calculate.sublime-settings")
+        enable_clipboard = settings.get("copy_to_clipboard", False)
+        if enable_clipboard:
+            to_clipboard(result)
 
         # convert result to string if needed
         if not isinstance(result, str):
@@ -292,7 +308,7 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
         result = repr(self.operation(numbers, **kwargs))
 
         # Get clipboard settings, by default clipboard is off.
-        settings = sublime.load_settings("SublimeCalculate.sublime-settings")
+        settings = sublime.load_settings("Calculate.sublime-settings")
         enable_clipboard = settings.get("copy_to_clipboard", False)
         if enable_clipboard:
             to_clipboard(result)

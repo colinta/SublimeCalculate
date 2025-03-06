@@ -4,11 +4,19 @@
         "command": "calculate"
     },
     {
+        "caption": "Calculate: With Replace",
+        "command": "calculate_replace"
+    },
+    {
+        "caption": "Calculate: Run Command for each regions",
+        "command": "calculate_each_region"
+    },
+    {
         "caption": "Calculate: Average selections",
         "command": "calculate_mean"
     },
     {
-        "caption": "Calculate: Standard Deviation of selections",
+        "caption": "Calculate: Standard deviation of selections",
         "command": "calculate_std"
     },
     {
@@ -26,5 +34,9 @@
     {
         "caption": "Calculate: Count",
         "command": "calculate_count"
-    }
+    },
+    {
+        "caption": "Calculate: Open Settings",
+        "command": "open_settings"
+    },
 ]

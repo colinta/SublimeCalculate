@@ -3,10 +3,13 @@ import math
 import random
 import re
 from locale import (atof, str as locale_str)
-
+import os
 import sublime
 import sublime_plugin
+import json
 
+def load_settings():
+    return sublime.load_settings("SublimeCalculate.sublime-settings")
 
 def mean(numbers, *more):
     if more:
@@ -51,6 +54,11 @@ class SelectionListener(sublime_plugin.EventListener):
         numbers = [atof(view.substr(sel)) for sel in number_selections]
         sublime.status_message("Sum: {:n}\tAverage: {:n}".format(sum(numbers), mean(numbers)))
 
+# add replace command for convenience
+class CalculateReplaceCommand(CalculateCommand):
+    def run(self, edit):
+        self.view.run_command("calculate", {"replace": True})
+
 class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
         sublime_plugin.TextCommand.__init__(self, *args, **kwargs)
@@ -93,6 +101,8 @@ class CalculateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, **kwargs):
         self.dict['i'] = 0
+        # sometimes `n` is quite useful
+        self.dict['n'] = len(self.view.sel())
 
         for region in self.view.sel():
             try:
@@ -292,7 +302,7 @@ class CalculateMathCommand(sublime_plugin.TextCommand):
         result = repr(self.operation(numbers, **kwargs))
 
         # Get clipboard settings, by default clipboard is off.
-        settings = sublime.load_settings("SublimeCalculate.sublime-settings")
+        settings = load_settings()
         enable_clipboard = settings.get("copy_to_clipboard", False)
         if enable_clipboard:
             to_clipboard(result)
@@ -341,3 +351,41 @@ class CalculateIncrementCommand(sublime_plugin.TextCommand):
 
 class CalculateDecrementCommand(CalculateIncrementCommand):
     DELTA = -1
+
+class CalculateEachRegionCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.window().show_input_panel("Enter command:", "", self.on_done, None, None)
+
+    def on_done(self, input_string):
+        self.view.run_command("apply_calculation", {"command": input_string})
+
+class ApplyCalculationCommand(CalculateCommand):
+    def run(self, edit, command):
+        self.dict['i'] = 0
+        self.dict['n'] = len(self.view.sel())
+
+        selections = self.view.sel()
+        for region in selections:
+            try:
+                formula = self.view.substr(region)
+                self.dict['x'] = eval(formula, self.dict, {})
+                result = eval(command, self.dict, {})
+                self.view.replace(edit, region, str(result))
+
+            except Exception as exception:
+                error = str(exception)
+                self.view.show_popup(error)
+
+            self.dict['i'] = self.dict['i'] + 1
+
+
+class OpenSettingsCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        setting_path = os.path.join(sublime.packages_path(), 'User', 'SublimeCalculate.sublime-settings')
+        if not os.path.exists(setting_path):
+            default_settings = {
+                "copy_to_clipboard": False,
+            }
+            with open(setting_path, 'w') as f:
+                json.dump(default_settings, f, indent=4)
+        self.window.run_command("open_file", {"file": setting_path})

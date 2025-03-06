@@ -62,6 +62,7 @@ class CalculateReplaceCommand(CalculateCommand):
 class CalculateCommand(sublime_plugin.TextCommand):
     def __init__(self, *args, **kwargs):
         sublime_plugin.TextCommand.__init__(self, *args, **kwargs)
+        self.settings = load_settings()
         self.dict = {}
         for key in dir(random):
             self.dict[key] = getattr(random, key)
@@ -98,11 +99,14 @@ class CalculateCommand(sublime_plugin.TextCommand):
                 pass
 
         self.dict['__builtins__'] = builtins
+        self.index_symbol = self.settings.get('index_symbol', 'i')
+        self.total_count_symbol = self.settings.get('total_count_symbol', 'n')
+        self.region_symbol = self.settings.get('region_symbol', 'x')
 
     def run(self, edit, **kwargs):
-        self.dict['i'] = 0
+        self.dict[self.index_symbol] = 0
         # sometimes `n` is quite useful
-        self.dict['n'] = len(self.view.sel())
+        self.dict[self.total_count_symbol] = len(self.view.sel())
 
         for region in self.view.sel():
             try:
@@ -110,7 +114,7 @@ class CalculateCommand(sublime_plugin.TextCommand):
             except Exception as exception:
                 error = str(exception)
 
-            self.dict['i'] = self.dict['i'] + 1
+            self.dict[self.index_symbol] = self.dict[self.index_symbol] + 1
             if error:
                 self.view.show_popup(error)
 
@@ -361,14 +365,14 @@ class CalculateEachRegionCommand(sublime_plugin.TextCommand):
 
 class ApplyCalculationCommand(CalculateCommand):
     def run(self, edit, command):
-        self.dict['i'] = 0
-        self.dict['n'] = len(self.view.sel())
+        self.dict[self.index_symbol] = 0
+        self.dict[self.total_count_symbol] = len(self.view.sel())
 
         selections = self.view.sel()
         for region in selections:
             try:
                 formula = self.view.substr(region)
-                self.dict['x'] = eval(formula, self.dict, {})
+                self.dict[self.region_symbol] = eval(formula, self.dict, {})
                 result = eval(command, self.dict, {})
                 self.view.replace(edit, region, str(result))
 
@@ -376,7 +380,7 @@ class ApplyCalculationCommand(CalculateCommand):
                 error = str(exception)
                 self.view.show_popup(error)
 
-            self.dict['i'] = self.dict['i'] + 1
+            self.dict[self.index_symbol] = self.dict[self.index_symbol] + 1
 
 
 class OpenSettingsCommand(sublime_plugin.WindowCommand):
@@ -385,6 +389,9 @@ class OpenSettingsCommand(sublime_plugin.WindowCommand):
         if not os.path.exists(setting_path):
             default_settings = {
                 "copy_to_clipboard": False,
+                "index_symbol": "i",
+                "total_count_symbol": "n",
+                "region_symbol": "x",
             }
             with open(setting_path, 'w') as f:
                 json.dump(default_settings, f, indent=4)

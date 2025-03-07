@@ -4,11 +4,11 @@
         "command": "calculate"
     },
     {
-        "caption": "Calculate: With Replace",
+        "caption": "Calculate: With replace",
         "command": "calculate_replace"
     },
     {
-        "caption": "Calculate: Run Command for each regions",
+        "caption": "Calculate: Run command for each regions",
         "command": "calculate_each_region"
     },
     {

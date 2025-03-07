@@ -386,11 +386,13 @@ class ApplyCalculationCommand(CalculateCommand):
         selections = self.view.sel()
         for region in selections:
             try:
-                formula = self.view.substr(region)
-                self.dict[self.region_symbol] = eval(formula, self.dict, {})
+                if not region.empty():
+                    formula = self.view.substr(region)
+                    self.dict[self.region_symbol] = eval(formula, self.dict, {})
+                else:
+                    self.dict[self.region_symbol] = 0
                 result = eval(command, self.dict, {})
                 self.view.replace(edit, region, str(result))
-
             except Exception as exception:
                 error = str(exception)
                 self.view.show_popup(error)

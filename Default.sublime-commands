@@ -4,11 +4,19 @@
         "command": "calculate"
     },
     {
+        "caption": "Calculate: With replace",
+        "command": "calculate_replace"
+    },
+    {
+        "caption": "Calculate: Run command for each regions",
+        "command": "calculate_each_region"
+    },
+    {
         "caption": "Calculate: Average selections",
         "command": "calculate_mean"
     },
     {
-        "caption": "Calculate: Standard Deviation of selections",
+        "caption": "Calculate: Standard deviation of selections",
         "command": "calculate_std"
     },
     {

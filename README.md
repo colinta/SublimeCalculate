@@ -1,4 +1,5 @@
-# Calculate
+Calculate
+=========
 
 Select a formula and run `calculate` to evaluate it using python. The result can be appended to the selection (`1+1` => `1+1 = 2`) or replace the selection (`1+1` => `2`). Using the `replace: true` option replaces the selected text with the result. Empty selections are treated as operating on lines, like most sublime commands. When the line under the caret is not a formula, you will be prompted for one, and the result will be inserted.
 
@@ -51,18 +52,10 @@ There is also a `calculate_count` command, used to count from 1 (or another inde
 
 ## Installation
 
-1. Using Package Control, install "Calculate"
+Using Package Control, install "Calculate" or clone this repo in your packages folder.
 
-Or:
-
-1. Open the Sublime Text Packages folder
-
-   - OS X: ~/Library/Application Support/Sublime Text 3/Packages/
-   - Windows: %APPDATA%/Sublime Text 3/Packages/
-   - Linux: ~/.Sublime Text 3/Packages/ or ~/.config/sublime-text-3/Packages
-
-2. clone this repo
-3. Install keymaps for the commands (see Example.sublime-keymap for my preferred keys)
+I recommended you add key bindings for the commands. I've included my preferred bindings below.
+Copy them to your key bindings file (⌘⇧,).
 
 ## Commands
 
@@ -85,18 +78,15 @@ Or:
 - `total_count_symbol`: Default is `'n'`. It presents the total count of regions.
 - `region_symbol`: Default is `'x'`. It presents each region's value.
 
-## Keybindings
+Key Bindings
+------------
 
-Open your key bindings file and add the bindings you want. For example:
+Copy these to your user key bindings file.
 
-###### Example.sublime-keymap
-
-```json
-[
-  { "keys": ["ctrl+shift+="], "command": "calculate", "args": { "replace": false } },
-  { "keys": ["ctrl+shift+c"], "command": "calculate", "args": { "replace": true } },
-  { "keys": ["ctrl+up"], "command": "calculate_increment" },
-  { "keys": ["ctrl+down"], "command": "calculate_decrement" },
-  { "keys": ["ctrl+shift+alt+1"], "command": "calculate_count" }
-]
-```
+<!-- keybindings start -->
+    { "keys": ["ctrl+shift+="], "command": "calculate", "args": {"replace": false} },
+    { "keys": ["ctrl+shift+c"], "command": "calculate", "args": {"replace": true} },
+    { "keys": ["ctrl+up"], "command": "calculate_increment" },
+    { "keys": ["ctrl+down"], "command": "calculate_decrement" },
+    { "keys": ["ctrl+shift+alt+1"], "command": "calculate_count" },
+<!-- keybindings stop -->
